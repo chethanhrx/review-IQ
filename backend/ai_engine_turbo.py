@@ -358,7 +358,8 @@ async def analyze_batch_turbo(reviews: List[str]) -> List[Dict]:
                 if isinstance(ai_result, dict):
                     idx = ai_result.get("i", 0)
                     if 0 <= idx < len(reviews):
-                        del ai_result["needs_ai"] if "needs_ai" in ai_result else None
+                        if "needs_ai" in ai_result:
+                            del ai_result["needs_ai"]
                         results[idx] = ai_result
                         _analysis_cache.set(reviews[idx], ai_result)
     
