@@ -47,8 +47,13 @@ from trend_engine_turbo import (
     calculate_health_score_turbo
 )
 
-# Enable turbo mode by default for faster processing
-TURBO_MODE = os.getenv("TURBO_MODE", "true").lower() == "true"
+# ULTRA MODE: 1000x faster - pure heuristic, NO API calls
+from preprocessor_ultra import preprocess_ultra
+from ai_engine_ultra import analyze_ultra, map_analysis_ultra
+
+# Enable ultra mode by default for maximum speed
+ULTRA_MODE = os.getenv("ULTRA_MODE", "true").lower() == "true"
+TURBO_MODE = os.getenv("TURBO_MODE", "true").lower() == "true" and not ULTRA_MODE
 
 # ── App Setup ──────────────────────────────────────────────────────────────
 app = FastAPI(title="ReviewIQ", version="1.0.0", description="AI-Powered Review Intelligence")
@@ -222,10 +227,12 @@ async def run_analysis_pipeline(
     })
     await asyncio.sleep(0)
 
-    # Step 2: Turbo Preprocess (100x faster)
+    # Step 2: ULTRA Preprocess (1000x faster - NO API calls)
     reviews_list = df.to_dict(orient="records")
     
-    if TURBO_MODE:
+    if ULTRA_MODE:
+        preprocess_result = await preprocess_ultra(reviews_list)
+    elif TURBO_MODE:
         preprocess_result = await preprocess_reviews_turbo(reviews_list)
     else:
         preprocess_result = await asyncio.to_thread(preprocess_reviews, reviews_list)
@@ -246,7 +253,7 @@ async def run_analysis_pipeline(
     batch.flagged_count = preprocess_result["flagged_count"]
     db.commit()
 
-    # Step 3: Turbo AI Analysis - Single batch call for ALL reviews (massively parallel)
+    # Step 3: ULTRA AI Analysis - Pure heuristic, NO API calls (1000x faster)
     processed = 0
     all_review_objects = []
     
@@ -254,8 +261,10 @@ async def run_analysis_pipeline(
         # Extract all texts at once
         all_texts = [r.get("clean_text", r.get("review_text", "")) for r in clean_reviews]
         
-        # Single turbo analysis call for all reviews (handles batching internally)
-        if TURBO_MODE:
+        # ULTRA: Pure heuristic analysis (milliseconds for 1000 reviews)
+        if ULTRA_MODE:
+            all_results = analyze_ultra(all_texts)  # No async needed - it's instant
+        elif TURBO_MODE:
             all_results = await analyze_batch_turbo(all_texts)
         else:
             # Fallback to slower chunked processing
@@ -267,7 +276,9 @@ async def run_analysis_pipeline(
         
         # Map results to review objects
         for review_data, ai_result in zip(clean_reviews, all_results):
-            if TURBO_MODE:
+            if ULTRA_MODE:
+                mapped = map_analysis_ultra(ai_result)
+            elif TURBO_MODE:
                 mapped = map_analysis_to_review_turbo(ai_result)
             else:
                 mapped = map_analysis_to_review(ai_result)
@@ -295,7 +306,7 @@ async def run_analysis_pipeline(
             )
             all_review_objects.append(review)
         
-        # BULK INSERT - 100x faster than individual commits
+        # BULK INSERT - Single commit for all reviews
         db.bulk_save_objects(all_review_objects)
         db.commit()
         
@@ -316,7 +327,7 @@ async def run_analysis_pipeline(
                     "language": r.original_language,
                     "is_bot": r.is_bot_suspected,
                 }
-                for r in all_review_objects[:10]  # Show first 10
+                for r in all_review_objects[:10]
             ],
         })
         await asyncio.sleep(0)
@@ -390,7 +401,9 @@ async def run_analysis_pipeline(
         "action_cards": all_action_cards,
         "products": products,
         "elapsed_seconds": round(elapsed, 2),
+        "ultra_mode": ULTRA_MODE,
         "turbo_mode": TURBO_MODE,
+        "mode": "ULTRA" if ULTRA_MODE else ("TURBO" if TURBO_MODE else "STANDARD"),
     })
 
 
