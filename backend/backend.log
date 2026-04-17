@@ -1,0 +1,59 @@
+/home/chethan/projects/Review-IQ/backend/ai_engine.py:15: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+/home/chethan/projects/Review-IQ/backend/main.py:49: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Will watch for changes in these directories: ['/home/chethan/projects/Review-IQ/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [93085] using WatchFiles
+/home/chethan/projects/Review-IQ/backend/ai_engine.py:15: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+INFO:     Started server process [93152]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:46176 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46182 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46186 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46190 - "GET /api/alerts/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46192 - "GET /api/reviews/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV?page=1&limit=20&filter=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51864 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51878 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51890 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51902 - "GET /api/alerts/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51910 - "GET /api/reviews/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV?page=1&limit=20&filter=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51920 - "GET /api/alerts/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51948 - "GET /api/trends/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51936 - "GET /api/dashboard/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51964 - "GET /api/alerts/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51976 - "GET /api/trends/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51990 - "GET /api/dashboard/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33628 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33630 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33638 - "GET /api/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33650 - "GET /api/alerts/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33670 - "GET /api/trends/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33654 - "GET /api/dashboard/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33684 - "GET /api/alerts/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33696 - "GET /api/alerts/tizum%20HDMI%20to%20VGA%20Adapter%20Cable%201080P%20for%20Projector%2C%20Computer%2C%20Laptop%2C%20TV%2C%20Projectors%20%26%20TV HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38806 - "POST /api/upload/detect-columns HTTP/1.1" 200 OK
+/home/chethan/projects/Review-IQ/backend/column_detector.py:129: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  result["submitted_at"] = pd.to_datetime(df[date_col], errors="coerce")
+INFO:     127.0.0.1:38808 - "POST /api/upload/csv-stream HTTP/1.1" 200 OK
