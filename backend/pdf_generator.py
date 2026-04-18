@@ -177,7 +177,7 @@ def generate_report(product_name: str, user_id: int, db: Session) -> bytes:
     # Footer
     c.setFillColor(TEXT_MUTED)
     c.setFont("Helvetica", 8)
-    c.drawCentredString(PAGE_WIDTH / 2, 40, "ReviewIQ Intelligence Platform — Powered by Google Gemini AI")
+    c.drawCentredString(PAGE_WIDTH / 2, 40, "ReviewIQ Intelligence Platform — Powered by Bytesrz")
     c.showPage()
 
     # ═══════════════════════════════════════════════════════════════════════

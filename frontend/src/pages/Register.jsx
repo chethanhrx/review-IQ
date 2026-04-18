@@ -132,7 +132,7 @@ export default function Register() {
         {/* Footer */}
         <div className="flex items-center justify-center gap-1.5 mt-6">
           <Sparkles size={12} className="text-brand-amber" />
-          <span className="text-xs text-text-muted">Powered by Google Gemini AI</span>
+          <span className="text-xs text-text-muted">Powered by Bytesrz</span>
         </div>
       </div>
     </div>

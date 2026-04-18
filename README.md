@@ -299,4 +299,4 @@ Built with ❤️ for **Hack Malenadu '26**
 
 ---
 
-<p align="center"><sub>Powered by Google Gemini AI</sub></p>
+<p align="center"><sub>Powered by Bytesrz</sub></p>

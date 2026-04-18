@@ -122,7 +122,7 @@ export default function Sidebar() {
 
         <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-elevated/50">
           <Sparkles size={12} className="text-brand-amber" />
-          <span className="text-[10px] text-text-muted">Powered by Gemini</span>
+          <span className="text-[10px] text-text-muted">Powered by Bytesrz</span>
         </div>
       </div>
     </aside>
