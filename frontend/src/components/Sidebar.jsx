@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { useProducts } from '../context/ProductContext'
 import {
   LayoutDashboard, Upload, TrendingUp, MessageSquare,
-  AlertTriangle, LogOut, Sparkles, Plug
+  AlertTriangle, LogOut, Sparkles, Plug, Target
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
@@ -15,6 +15,7 @@ const navItems = [
   { to: '/trends', icon: TrendingUp, label: 'Trends' },
   { to: '/reviews', icon: MessageSquare, label: 'Reviews' },
   { to: '/alerts', icon: AlertTriangle, label: 'Alerts' },
+  { to: '/strategy', icon: Target, label: 'Strategy' },
 ]
 
 export default function Sidebar() {

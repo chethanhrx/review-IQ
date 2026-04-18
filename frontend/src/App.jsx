@@ -11,6 +11,7 @@ import Trends from './pages/Trends'
 import Reviews from './pages/Reviews'
 import Alerts from './pages/Alerts'
 import RetailerConnect from './pages/RetailerConnect'
+import Strategy from './pages/Strategy'
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth()
@@ -110,6 +111,16 @@ export default function App() {
             <ProtectedRoute>
               <AppLayout>
                 <Alerts />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/strategy"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Strategy />
               </AppLayout>
             </ProtectedRoute>
           }

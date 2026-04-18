@@ -204,8 +204,6 @@ export default function Dashboard() {
 
       {/* Critical Alerts Banner */}
       <AlertBanner alerts={alerts} />
-
-      {/* Stat Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
         <StatCard
           icon={MessageSquare}
@@ -342,31 +340,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Action Cards Centerpiece */}
-      <AnimatePresence>
-        {actionCards.length > 0 && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
-              <h3 className="text-sm font-syne font-black text-text-primary uppercase tracking-[0.3em] italic flex items-center gap-3">
-                <Heart size={18} className="text-brand-red animate-pulse" />
-                AI Strategy Center
-              </h3>
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-              {actionCards.map((card, i) => (
-                <ActionCard
-                  key={card.id}
-                  card={card}
-                  index={i}
-                  onResolve={handleResolve}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-      </AnimatePresence>
+      {/* Strategy Center has been moved to a standalone page */}
 
       {/* Feature Intelligence Matrix */}
       <div className="space-y-4">

@@ -6,7 +6,7 @@ const AuthContext = createContext(null)
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(localStorage.getItem('reviewiq_token') || null)
-  const [loading, setLoading] = useState(false) // Start with false to prevent initial loading
+  const [loading, setLoading] = useState(!!localStorage.getItem('reviewiq_token'))
 
   useEffect(() => {
     if (token) {

@@ -6,6 +6,8 @@ export default function LiveSourcesFixed() {
   const [sources, setSources] = useState([])
   const [loading, setLoading] = useState(false)
   const [fetching, setFetching] = useState({})
+  const [progress, setProgress] = useState({})
+  const [totals, setTotals] = useState({})
 
   // Initialize component on mount
   useEffect(() => {
@@ -64,21 +66,18 @@ export default function LiveSourcesFixed() {
         { withCredentials: true }
       )
 
-      let currentProgress = 0
-      let totalReviews = 0
-
       eventSource.onmessage = (event) => {
         const data = JSON.parse(event.data)
         
         if (data.type === 'progress') {
-          currentProgress = Math.round((data.current / data.total) * 100)
-          totalReviews = data.total
+          setProgress(prev => ({ ...prev, [sourceId]: Math.round((data.current / data.total) * 100) }))
+          setTotals(prev => ({ ...prev, [sourceId]: data.total }))
         }
         
         if (data.type === 'complete') {
           setFetching(prev => ({ ...prev, [sourceId]: false }))
           setSources(prev => prev.map(source => 
-            source.id === sourceId ? { ...source, total_fetched: totalReviews } : source
+            source.id === sourceId ? { ...source, total_fetched: data.total || 0 } : source
           ))
         }
       }
@@ -230,11 +229,11 @@ export default function LiveSourcesFixed() {
                 <div className="w-full bg-white/10 rounded-full h-2 mt-3">
                   <div 
                     className="bg-teal/500 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(currentProgress / 100) * 100}%` }}
+                    style={{ width: `${progress[source.id] || 0}%` }}
                   />
                 </div>
                 <p className="text-center text-white text-xs font-medium">
-                  {currentProgress}% complete ({totalReviews} reviews)
+                  {progress[source.id] || 0}% complete ({totals[source.id] || 0} reviews)
                 </p>
               </div>
             )}
