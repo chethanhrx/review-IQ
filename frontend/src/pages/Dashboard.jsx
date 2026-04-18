@@ -3,7 +3,7 @@ import { useProducts } from '../context/ProductContext'
 import axios from 'axios'
 import {
   MessageSquare, Bot, AlertTriangle, Shield, Heart,
-  TrendingUp, Globe, Activity, LayoutGrid, Zap, Plug, RefreshCw
+  TrendingUp, Globe, Activity, LayoutGrid, Zap, Plug, RefreshCw, BarChart3, Upload
 } from 'lucide-react'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -14,7 +14,7 @@ import ActionCard from '../components/ActionCard'
 import AlertBanner from '../components/AlertBanner'
 import ReviewTable from '../components/ReviewTable'
 import SkeletonLoader from '../components/SkeletonLoader'
-import LiveSources from '../components/LiveSources'
+import LiveSourcesFixed from '../components/LiveSourcesFixed'
 import { useNavigate } from 'react-router-dom'
 
 const SENTIMENT_COLORS = ['#00FFD1', '#FF4B4B', '#7C3AED']
@@ -36,6 +36,7 @@ export default function Dashboard() {
   const [data, setData] = useState(null)
   const [trends, setTrends] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -48,15 +49,39 @@ export default function Dashboard() {
 
   const fetchDashboard = async () => {
     setLoading(true)
+    setError(null)
     try {
+      // Try multiple possible token keys
+      const token = localStorage.getItem('reviewiq_token') || 
+                      localStorage.getItem('token') || 
+                      localStorage.getItem('authToken') ||
+                      localStorage.getItem('access_token')
+      
+      console.log('Dashboard token:', token)
+      
+      if (!token) {
+        setError('No authentication token found. Please login again.')
+        setData(null)
+        setTrends(null)
+        setLoading(false)
+        return
+      }
+      
       const [dashRes, trendsRes] = await Promise.all([
-        axios.get(`/api/dashboard/${encodeURIComponent(selectedProduct)}`),
-        axios.get(`/api/trends/${encodeURIComponent(selectedProduct)}`),
+        axios.get(`/api/dashboard/${encodeURIComponent(selectedProduct)}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }),
+        axios.get(`/api/trends/${encodeURIComponent(selectedProduct)}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        }),
       ])
       setData(dashRes.data)
       setTrends(trendsRes.data)
     } catch (err) {
       console.error('Dashboard fetch error:', err)
+      setError(err.response?.data?.detail || 'Failed to load dashboard data')
+      setData(null)
+      setTrends(null)
     } finally {
       setLoading(false)
     }
@@ -112,6 +137,32 @@ export default function Dashboard() {
           <div className="h-80 bg-white/5 rounded-2xl" />
         </div>
         <div className="grid grid-cols-3 gap-4"><div className="h-40 bg-white/5 rounded-2xl" /><div className="h-40 bg-white/5 rounded-2xl" /><div className="h-40 bg-white/5 rounded-2xl" /></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] gap-6 text-center">
+        <div className="relative">
+          <div className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-red/20 to-orange/20 border border-white/10 flex items-center justify-center animate-float">
+            <AlertTriangle size={40} className="text-red-500" />
+          </div>
+          <div className="absolute -inset-4 bg-red/10 blur-3xl -z-10 rounded-full" />
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-3xl font-syne font-black text-text-primary tracking-tight">Dashboard Error</h2>
+          <p className="text-text-muted text-sm max-w-sm mx-auto">{error}</p>
+        </div>
+        <button
+          onClick={() => {
+            setError(null)
+            fetchDashboard()
+          }}
+          className="px-8 py-3 bg-teal text-black rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(0,255,209,0.3)]"
+        >
+          Retry
+        </button>
       </div>
     )
   }
@@ -234,16 +285,18 @@ export default function Dashboard() {
 
         {/* Anomaly / Alerts List */}
         <div className="lg:col-span-8 glass-card p-5 flex flex-col">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-xs font-black text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
-               <Activity size={14} className="text-brand-red" />
-               Signal Detection
-            </h3>
-            <span className="font-mono text-[10px] font-bold text-teal bg-teal/10 px-3 py-1 rounded-full border border-teal/20">
-              {alerts.length} Active Signals
-            </span>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-white">Dashboard</h2>
+            <div className="flex gap-2">
+              <button
+                onClick={() => navigate('/upload')}
+                className="px-4 py-2 bg-brand-primary text-white rounded-lg hover:bg-brand-primary/80 transition-all flex items-center gap-2 border border-white/10"
+              >
+                <Upload size={18} />
+                Upload Reviews
+              </button>
+            </div>
           </div>
-
           <div className="flex-1 space-y-3 max-h-[280px] overflow-y-auto pr-2">
             <AnimatePresence mode="popLayout">
               {alerts.length === 0 ? (
@@ -390,7 +443,7 @@ export default function Dashboard() {
           Live Sources
         </h3>
         <div className="glass-card p-5">
-          <LiveSources />
+          <LiveSourcesFixed />
         </div>
       </div>
     </div>

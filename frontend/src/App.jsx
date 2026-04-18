@@ -1,6 +1,5 @@
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
-import { AnimatePresence, motion } from 'framer-motion'
 import Sidebar from './components/Sidebar'
 import TopBar from './components/TopBar'
 import Toast from './components/Toast'
@@ -48,99 +47,75 @@ function AppLayout({ children }) {
   )
 }
 
-const pageVariants = {
-  initial: { opacity: 0, y: 10 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -10 },
-}
-
-function AnimatedPage({ children }) {
-  return (
-    <motion.div
-      variants={pageVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-    >
-      {children}
-    </motion.div>
-  )
-}
-
 export default function App() {
-  const location = useLocation()
-
   return (
     <>
       <Toast />
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <AppLayout>
-                  <AnimatedPage><Dashboard /></AnimatedPage>
-                </AppLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/upload"
-            element={
-              <ProtectedRoute>
-                <AppLayout>
-                  <AnimatedPage><Upload /></AnimatedPage>
-                </AppLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/retailer-connect"
-            element={
-              <ProtectedRoute>
-                <AppLayout>
-                  <AnimatedPage><RetailerConnect /></AnimatedPage>
-                </AppLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/trends"
-            element={
-              <ProtectedRoute>
-                <AppLayout>
-                  <AnimatedPage><Trends /></AnimatedPage>
-                </AppLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/reviews"
-            element={
-              <ProtectedRoute>
-                <AppLayout>
-                  <AnimatedPage><Reviews /></AnimatedPage>
-                </AppLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/alerts"
-            element={
-              <ProtectedRoute>
-                <AppLayout>
-                  <AnimatedPage><Alerts /></AnimatedPage>
-                </AppLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </AnimatePresence>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/upload"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Upload />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/retailer-connect"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <RetailerConnect />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trends"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Trends />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reviews"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Reviews />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/alerts"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Alerts />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </>
   )
 }

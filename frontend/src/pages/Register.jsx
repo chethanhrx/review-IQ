@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
-import { motion } from 'framer-motion'
+
 import { Mail, Lock, User, ArrowRight, Sparkles } from 'lucide-react'
 
 export default function Register() {
@@ -37,11 +37,7 @@ export default function Register() {
         <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-teal/5 rounded-full blur-3xl" />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative w-full max-w-md"
+      <div className="relative w-full max-w-md animate-fade-in"
       >
         {/* Logo */}
         <div className="text-center mb-8">
@@ -138,7 +134,7 @@ export default function Register() {
           <Sparkles size={12} className="text-brand-amber" />
           <span className="text-xs text-text-muted">Powered by Google Gemini AI</span>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

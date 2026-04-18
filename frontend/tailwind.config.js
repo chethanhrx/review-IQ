@@ -31,6 +31,7 @@ export default {
         'flash-green': 'flash-green 800ms ease-out',
         'shimmer': 'shimmer 1.5s infinite',
         'count-up': 'countUp 1.2s ease-out',
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
       },
       keyframes: {
         'pulse-red': {
@@ -47,6 +48,10 @@ export default {
         },
         countUp: {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },

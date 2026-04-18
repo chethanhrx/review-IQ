@@ -4,22 +4,94 @@ import axios from 'axios'
 
 export default function LiveSources() {
   const [sources, setSources] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false) // Start with false to prevent initial blink
   const [fetching, setFetching] = useState({})
+  const [isMounted, setIsMounted] = useState(true)
 
   useEffect(() => {
-    fetchSources()
+    if (isMounted) {
+      fetchSources()
+    }
+  }, [isMounted])
+
+  // Prevent UI collapse on mount - ensure stable loading state
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (loading) {
+        setLoading(false)
+      }
+    }, 300) // Increased timeout for stability
+    return () => clearTimeout(timer)
+  }, [loading])
+
+  useEffect(() => {
+    setIsComponentMounted(true)
+    return () => {
+      setIsComponentMounted(false)
+    }
   }, [])
 
-  const fetchSources = async () => {
-    try {
-      const token = localStorage.getItem('token')
+  useEffect(() => {
+    return () => {
+      if (isComponentMounted) {
+      console.log('All localStorage keys:', allKeys)
+      
+      // Try multiple possible token keys
+      const token = localStorage.getItem('reviewiq_token') || 
+                      localStorage.getItem('token') || 
+                      localStorage.getItem('authToken') ||
+                      localStorage.getItem('access_token')
+      
+      console.log('Retrieved token:', token)
+      
+      if (!token) {
+        console.error('No token found')
+        setSources([])
+        setLoading(false)
+        return
+      }
+      
       const response = await axios.get('/api/retailer/list', {
         headers: { Authorization: `Bearer ${token}` }
       })
       setSources(response.data.apis || [])
     } catch (error) {
       console.error('Failed to fetch sources:', error)
+      setSources([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchSources = async () => {
+    setLoading(true)
+    try {
+      // Debug: Check what's in localStorage
+      const allKeys = Object.keys(localStorage)
+      console.log('All localStorage keys:', allKeys)
+      
+      // Try multiple possible token keys
+      const token = localStorage.getItem('reviewiq_token') || 
+                      localStorage.getItem('token') || 
+                      localStorage.getItem('authToken') ||
+                      localStorage.getItem('access_token')
+      
+      console.log('Retrieved token:', token)
+      
+      if (!token) {
+        console.error('No token found')
+        setSources([])
+        setLoading(false)
+        return
+      }
+      
+      const response = await axios.get('/api/retailer/list', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      setSources(response.data.apis || [])
+    } catch (error) {
+      console.error('Failed to fetch sources:', error)
+      setSources([])
     } finally {
       setLoading(false)
     }
@@ -29,7 +101,7 @@ export default function LiveSources() {
     setFetching(prev => ({ ...prev, [sourceId]: true }))
     
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('reviewiq_token')
       const eventSource = new EventSource(
         `/api/retailer/${sourceId}/fetch?token=${token}`,
         { withCredentials: true }

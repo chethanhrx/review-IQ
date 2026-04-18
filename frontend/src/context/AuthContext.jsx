@@ -5,11 +5,12 @@ const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
-  const [token, setToken] = useState(localStorage.getItem('reviewiq_token'))
-  const [loading, setLoading] = useState(true)
+  const [token, setToken] = useState(localStorage.getItem('reviewiq_token') || null)
+  const [loading, setLoading] = useState(false) // Start with false to prevent initial loading
 
   useEffect(() => {
     if (token) {
+      setLoading(true) // Only show loading when actually checking auth
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
       axios.get('/api/auth/me')
         .then(res => {
@@ -20,8 +21,6 @@ export function AuthProvider({ children }) {
           logout()
           setLoading(false)
         })
-    } else {
-      setLoading(false)
     }
   }, [])
 

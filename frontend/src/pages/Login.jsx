@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
-import { motion } from 'framer-motion'
+
 import { Mail, Lock, ArrowRight, Sparkles } from 'lucide-react'
 
 export default function Login() {
@@ -35,12 +35,7 @@ export default function Login() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-blue/5 rounded-full blur-3xl" />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative w-full max-w-md"
-      >
+      <div className="relative w-full max-w-md animate-fade-in">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-3 mb-2">
@@ -120,7 +115,7 @@ export default function Login() {
           <Sparkles size={12} className="text-brand-amber" />
           <span className="text-xs text-text-muted">Powered by Google Gemini AI</span>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

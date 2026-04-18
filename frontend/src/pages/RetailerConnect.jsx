@@ -10,13 +10,11 @@ export default function RetailerConnect() {
   const [connecting, setConnecting] = useState(false)
   const [connectionTest, setConnectionTest] = useState(null)
   const [fetching, setFetching] = useState({})
-  const [showApiKey, setShowApiKey] = useState({})
   const [expandedGuide, setExpandedGuide] = useState(false)
 
   const [formData, setFormData] = useState({
     retailer_name: '',
-    api_url: '',
-    api_key: ''
+    api_url: ''
   })
 
   useEffect(() => {
@@ -25,7 +23,7 @@ export default function RetailerConnect() {
 
   const fetchApis = async () => {
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('reviewiq_token')
       const response = await axios.get('/api/retailer/list', {
         headers: { Authorization: `Bearer ${token}` }
       })
@@ -43,13 +41,17 @@ export default function RetailerConnect() {
     setConnectionTest({ step: 1, status: 'loading', message: 'Pinging API...' })
     await new Promise(resolve => setTimeout(resolve, 1000))
 
+    // Step 2: Verifying response format
+    setConnectionTest({ step: 2, status: 'loading', message: 'Verifying response format...' })
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
     try {
-      const token = localStorage.getItem('token')
-      
-      // Step 2: Verifying response format
-      setConnectionTest({ step: 2, status: 'loading', message: 'Verifying response format...' })
-      
-      const response = await axios.post('/api/retailer/connect', formData, {
+      const token = localStorage.getItem('reviewiq_token')
+      const response = await axios.post('/api/retailer/connect', {
+        retailer_name: formData.retailer_name,
+        api_url: formData.api_url,
+        api_key: '' // No API key needed for public API
+      }, {
         headers: { Authorization: `Bearer ${token}` }
       })
 
@@ -63,7 +65,7 @@ export default function RetailerConnect() {
         })
         
         // Reset form and refresh list
-        setFormData({ retailer_name: '', api_url: '', api_key: '' })
+        setFormData({ retailer_name: '', api_url: '' })
         await fetchApis()
         
         setTimeout(() => {
@@ -73,14 +75,14 @@ export default function RetailerConnect() {
         setConnectionTest({ 
           step: 3, 
           status: 'error', 
-          message: response.data.error || 'Connection failed'
+          message: response.data.error || 'Connection failed - check URL' 
         })
       }
     } catch (error) {
       setConnectionTest({ 
         step: 3, 
         status: 'error', 
-        message: error.response?.data?.error || 'Connection failed - check URL or API key'
+        message: error.response?.data?.detail || 'Connection failed - check URL' 
       })
     } finally {
       setConnecting(false)
@@ -91,7 +93,7 @@ export default function RetailerConnect() {
     setFetching(prev => ({ ...prev, [apiId]: true }))
     
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('reviewiq_token')
       const eventSource = new EventSource(
         `/api/retailer/${apiId}/fetch?token=${token}`,
         { withCredentials: true }
@@ -200,7 +202,7 @@ export default function RetailerConnect() {
     if (!confirm('Are you sure you want to remove this API connection?')) return
     
     try {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('reviewiq_token')
       await axios.delete(`/api/retailer/${apiId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
@@ -351,30 +353,9 @@ echo json_encode([
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-text-muted uppercase tracking-wider mb-2">
-              API Key
-            </label>
-            <div className="relative">
-              <input
-                type={showApiKey.new ? 'text' : 'password'}
-                placeholder="Your secure API key"
-                value={formData.api_key}
-                onChange={(e) => setFormData(prev => ({ ...prev, api_key: e.target.value }))}
-                className="w-full px-4 py-3 pr-12 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-teal/50 focus:bg-white/10 transition-all"
-              />
-              <button
-                onClick={() => setShowApiKey(prev => ({ ...prev, new: !prev.new }))}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/40 hover:text-white/60"
-              >
-                {showApiKey.new ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-          </div>
-
           <button
             onClick={testConnection}
-            disabled={connecting || !formData.api_url || !formData.retailer_name || !formData.api_key}
+            disabled={connecting || !formData.api_url || !formData.retailer_name}
             className="w-full py-3 bg-gradient-to-r from-teal to-teal/80 text-white font-bold rounded-lg hover:from-teal/90 hover:to-teal/70 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {connecting ? (
